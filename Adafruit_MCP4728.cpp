@@ -170,7 +170,7 @@ void Adafruit_MCP4728::setChannelValue(
 
   // build the setter header/ "address"
   // 0 1 0 0 0 DAC1 DAC0 UDAC[A]
-  uint8_t sequential_write_cmd = 0b01000000;
+  uint8_t sequential_write_cmd = MCP4728_MULTI_IR_CMD;
   sequential_write_cmd |= (channel << 1);
   sequential_write_cmd |= udac;
 
@@ -192,14 +192,34 @@ void Adafruit_MCP4728::setChannelValue(
  *
  */
 void Adafruit_MCP4728::saveToEEPROM(void) {
-  uint8_t buffer[24];
-  i2c_dev->read(buffer, 24);
+  uint8_t input_buffer[24];
+  uint8_t output_buffer[8];
 
-  printChannel(MCP4728_CHANNEL_A, buffer);
-  printChannel(MCP4728_CHANNEL_B, buffer);
-  printChannel(MCP4728_CHANNEL_C, buffer);
-  printChannel(MCP4728_CHANNEL_D, buffer);
+  i2c_dev->read(input_buffer, 24);
 
-  // pretty sure we can just send back out the bytes that came in from the input
-  // register
+  printChannel(MCP4728_CHANNEL_A, input_buffer);
+  printChannel(MCP4728_CHANNEL_B, input_buffer);
+  printChannel(MCP4728_CHANNEL_C, input_buffer);
+  printChannel(MCP4728_CHANNEL_D, input_buffer);
+
+  // build header byte 0 1 0 1 0 DAC1 DAC0 UDAC [A]
+  uint8_t eeprom_write_cmd = MCP4728_MULTI_EEPROM_CMD; // 0 1 0 1 0 xxx
+  eeprom_write_cmd |=
+      (MCP4728_CHANNEL_A << 1); // DAC1 DAC0, start at channel A obvs
+  eeprom_write_cmd |= 0;        // UDAC ; yes, latch please
+  // copy the incoming input register bytes to the outgoing buffer
+  // Channel A
+  output_buffer[0] = input_buffer[1];
+  output_buffer[1] = input_buffer[2];
+  // Channel B
+  output_buffer[2] = input_buffer[7];
+  output_buffer[3] = input_buffer[8];
+  // Channel C
+  output_buffer[4] = input_buffer[13];
+  output_buffer[5] = input_buffer[14];
+  // Channel D
+  output_buffer[6] = input_buffer[19];
+  output_buffer[7] = input_buffer[20];
+
+  i2c_dev->write(output_buffer, 8);
 }

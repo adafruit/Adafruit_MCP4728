@@ -1,8 +1,8 @@
-// Basic demo for accelerometer readings from Adafruit mcp301
+// Basic demo for configuring the MCP4728 4-Channel 12-bit I2C DAC
 #include <Adafruit_MCP4728.h>
 #include <Wire.h>
 
-Adafruit_MCP4728 mcp; // TODO FIX NAME
+Adafruit_MCP4728 mcp;
 
 void setup(void) {
   Serial.begin(115200);
@@ -30,11 +30,14 @@ void setup(void) {
    * Set to `true` to latch when the UDAC pin is pulled low
    *
    */
-  mcp.setChannelValue(MCP4728_CHANNEL_A, 0, MCP4728_VREF_INTERNAL,
+  mcp.setChannelValue(MCP4728_CHANNEL_A, 0);
+  mcp.setChannelValue(MCP4728_CHANNEL_B, 1024, MCP4728_VREF_INTERNAL,
                       MCP4728_GAIN_2X);
-  mcp.setChannelValue(MCP4728_CHANNEL_B, 2048);
-  mcp.setChannelValue(MCP4728_CHANNEL_C, 1024);
+  mcp.setChannelValue(MCP4728_CHANNEL_C, 2048, MCP4728_VREF_INTERNAL,
+                      MCP4728_GAIN_2X);
   mcp.setChannelValue(MCP4728_CHANNEL_D, 0);
+  delay(1000);
+  mcp.saveToEEPROM();
 }
 
 void loop() { delay(1000); }

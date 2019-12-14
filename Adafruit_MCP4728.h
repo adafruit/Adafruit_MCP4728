@@ -23,20 +23,11 @@
 #include <Wire.h>
 
 #define MCP4728_I2CADDR_DEFAULT 0x60 ///< MCP4728 default i2c address
-                                     // '0b 010 00 000'
-#define MCP4728_CH_A_MULTI_IB 0x40   ///< A fake register for channel A
-#define MCP4728_CH_B_MULTI_IB 0x42   ///< A fake register for channel B
-#define MCP4728_CH_C_MULTI_IB 0x44   ///< A fake register for channel C
-#define MCP4728_CH_D_MULTI_IB 0x46   ///< A fake register for channel D
 
-// '0b 010 11 000'
-#define MCP4728_CH_A_SINGLE_EEPROM 0x58 ///< A fake register for channel A
-#define MCP4728_CH_B_SINGLE_EEPROM 0x5A ///< A fake register for channel B
-#define MCP4728_CH_C_SINGLE_EEPROM 0x5C ///< A fake register for channel C
-#define MCP4728_CH_D_SINGLE_EEPROM 0x5E ///< A fake register for channel D
-
-// '0b 010 10 000'
-#define MCP4728_CH_A_MULTI_EEPROM 0x50 ///< A fake register for channel A
+#define MCP4728_MULTI_IR_CMD                                                   \
+  0x40 ///< Command to write to the input register only
+#define MCP4728_MULTI_EEPROM_CMD                                               \
+  0x50 ///< Command to write to the input register and EEPROM
 
 /**
  * @brief Power status values
