@@ -3,7 +3,7 @@ Adafruit MCP4728 ![Build Status](https://travis-ci.com/adafruit/Adafruit_MCP4728
 
 This is the Adafruit MCP4728 4-Channel 12-Bit I2C DAC Library for Arduino
 
-Tested and works great with the Adafruit MCP4728 Breakout Board 
+Tested and works great with the Adafruit MCP4728 Breakout Board
 [<img src="assets/board.png?raw=true" width="500px">](https://www.adafruit.com/products/4438)
 
 
@@ -28,7 +28,7 @@ https://learn.adafruit.com/the-well-automated-arduino-library/doxygen
 
 https://learn.adafruit.com/the-well-automated-arduino-library/doxygen-tips
 
-Written by Bryan Siepert for Adafruit Industries.  
+Written by Bryan Siepert for Adafruit Industries.
 BSD license, check license.txt for more information
 All text above must be included in any redistribution
 
