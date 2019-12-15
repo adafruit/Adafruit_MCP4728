@@ -36,13 +36,13 @@
  */
 
 typedef enum pd_mode {
-  MCP4728_PD_MOOE_NORMAL, ///< Normal; the channel outputs the given value as
+  MCP4728_PD_MODE_NORMAL, ///< Normal; the channel outputs the given value as
                           ///< normal.
-  MCP4728_PD_MOOE_GND_1K, ///< VOUT is loaded with 1 kΩ resistor to ground. Most
+  MCP4728_PD_MODE_GND_1K, ///< VOUT is loaded with 1 kΩ resistor to ground. Most
                           ///< of the channel circuits are powered off.
-  MCP4728_PD_MOOE_GND_100K, ///< VOUT is loaded with 100 kΩ resistor to ground.
+  MCP4728_PD_MODE_GND_100K, ///< VOUT is loaded with 100 kΩ resistor to ground.
                             ///< Most of the channel circuits are powered off.
-  MCP4728_PD_MOOE_GND_500K, ///< VOUT is loaded with 500 kΩ resistor to ground.
+  MCP4728_PD_MODE_GND_500K, ///< VOUT is loaded with 500 kΩ resistor to ground.
                             ///< Most of the channel circuits are powered off.
 } MCP4728_pd_mode_t;
 
@@ -91,10 +91,10 @@ public:
   void setChannelValue(MCP4728_channel_t channel, uint16_t new_value,
                        MCP4728_vref_t new_vref = MCP4728_VREF_VDD,
                        MCP4728_gain_t new_gain = MCP4728_GAIN_1X,
-                       MCP4728_pd_mode_t new_pd_mode = MCP4728_PD_MOOE_NORMAL,
+                       MCP4728_pd_mode_t new_pd_mode = MCP4728_PD_MODE_NORMAL,
                        bool udac = false);
-  void printChannel(MCP4728_channel_t channel, uint8_t *buffer);
-  void saveToEEPROM(void);
+
+  bool saveToEEPROM(void);
 
 private:
   bool _init(void);

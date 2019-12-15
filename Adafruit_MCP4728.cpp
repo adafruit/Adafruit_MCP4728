@@ -56,99 +56,7 @@ boolean Adafruit_MCP4728::begin(uint8_t i2c_address, TwoWire *wire) {
     return false;
   }
 
-  return _init();
-}
-
-boolean Adafruit_MCP4728::_init(void) {
-
-  uint8_t buffer[24];
-  // bool Adafruit_I2CDevice::read(uint8_t *buffer, size_t len, bool stop)
-  i2c_dev->read(buffer, 24);
-
-  printChannel(MCP4728_CHANNEL_A, buffer);
-  printChannel(MCP4728_CHANNEL_B, buffer);
-  printChannel(MCP4728_CHANNEL_C, buffer);
-  printChannel(MCP4728_CHANNEL_D, buffer);
-
-  // }
-  return true;
-}
-
-/**
- * @brief print the contents of the ADC's output buffer for a given channel
- *
- * @param channel The channel to print the values for
- * @param buffer A buffer holding the  DAC's current settings
- */
-void Adafruit_MCP4728::printChannel(MCP4728_channel_t channel,
-                                    uint8_t *buffer) {
-
-  uint8_t buffer_offset = 0;
-  switch (channel) {
-  case MCP4728_CHANNEL_A:
-    buffer_offset = 0;
-    break;
-  case MCP4728_CHANNEL_B:
-    buffer_offset = 6;
-    break;
-  case MCP4728_CHANNEL_C:
-    buffer_offset = 12;
-    break;
-  case MCP4728_CHANNEL_D:
-    buffer_offset = 18;
-    break;
-  }
-  uint8_t in_header = buffer[0 + buffer_offset];
-  uint16_t in_value =
-      buffer[1 + buffer_offset] << 8 | buffer[2 + buffer_offset];
-
-  bool a_vref = (in_value & 1 << 15) >> 15;
-  MCP4728_pd_mode_t a_pd = (in_value & 0b11 << 13) >> 13;
-  MCP4728_gain_t a_gain = (in_value & 1 << 12) >> 12;
-  uint16_t value = in_value & 4095;
-  Serial.println("******************* BUFFERAZ ****************");
-  Serial.print("A->INB: ");
-  Serial.print(in_header, BIN);
-  Serial.print(" ");
-  Serial.println(in_value, BIN);
-  Serial.println("*********************************************");
-
-  Serial.print("Value is ");
-  Serial.println(value);
-  Serial.print("Vref is ");
-  switch (a_vref) {
-  case MCP4728_VREF_VDD:
-    Serial.println("VDD");
-    break;
-  case MCP4728_VREF_INTERNAL:
-    Serial.println("Internal 2.048V Reference");
-    break;
-  }
-  Serial.print("Gain is ");
-  switch (a_gain) {
-  case MCP4728_GAIN_1X:
-    Serial.println("1X");
-    break;
-  case MCP4728_GAIN_2X:
-    Serial.println("2X");
-    break;
-  }
-  Serial.print("Power Down state is ");
-  switch (a_pd) {
-  case MCP4728_PD_MOOE_NORMAL:
-    Serial.println("Normal");
-    break;
-  case MCP4728_PD_MOOE_GND_1K:
-    Serial.println("Grounded w/ 1K");
-    break;
-  case MCP4728_PD_MOOE_GND_100K:
-    Serial.println("Grounded w/ 100K");
-    break;
-  case MCP4728_PD_MOOE_GND_500K:
-    Serial.println("Grounded w/ 500K");
-    break;
-  }
-  Serial.println("*********************************************");
+    return true;
 }
 
 /**
@@ -160,8 +68,9 @@ void Adafruit_MCP4728::printChannel(MCP4728_channel_t channel,
  * @param new_gain Optional gain setting - Defaults to `MCP4728_GAIN_1X`
  * @param new_pd_mode Optional power down mode setting - Defaults to
  * `MCP4728_PD_MOOE_NORMAL`
- * @param udac Optional UDAC setting - Defaults to `false`, latching (nearly).
- * Set to `true` to latch when the UDAC pin is pulled low
+ * @param udac Optional UDAC setting - Defaults to `false`, latching immediately.
+ *
+ * Set to `true` to latch when the LDAC pin is pulled low
  */
 
 void Adafruit_MCP4728::setChannelValue(
@@ -188,38 +97,41 @@ void Adafruit_MCP4728::setChannelValue(
 
 /**
  * @brief Saves the DAC's input register settings to the internal EEPROM,
- * makeing them defaults
+ * makeing them the default values when the ADC is powered on
  *
+ * @return true if the write was successful
+ * @return false if there was an error writing to the I2C bus
  */
-void Adafruit_MCP4728::saveToEEPROM(void) {
+bool Adafruit_MCP4728::saveToEEPROM(void) {
   uint8_t input_buffer[24];
-  uint8_t output_buffer[8];
+  uint8_t output_buffer[9];
 
   i2c_dev->read(input_buffer, 24);
-
-  printChannel(MCP4728_CHANNEL_A, input_buffer);
-  printChannel(MCP4728_CHANNEL_B, input_buffer);
-  printChannel(MCP4728_CHANNEL_C, input_buffer);
-  printChannel(MCP4728_CHANNEL_D, input_buffer);
 
   // build header byte 0 1 0 1 0 DAC1 DAC0 UDAC [A]
   uint8_t eeprom_write_cmd = MCP4728_MULTI_EEPROM_CMD; // 0 1 0 1 0 xxx
   eeprom_write_cmd |=
       (MCP4728_CHANNEL_A << 1); // DAC1 DAC0, start at channel A obvs
   eeprom_write_cmd |= 0;        // UDAC ; yes, latch please
+  // First byte is the write command+options
+  output_buffer[0] = eeprom_write_cmd;
+
   // copy the incoming input register bytes to the outgoing buffer
   // Channel A
-  output_buffer[0] = input_buffer[1];
-  output_buffer[1] = input_buffer[2];
+  output_buffer[1] = input_buffer[1];
+  output_buffer[2] = input_buffer[2];
   // Channel B
-  output_buffer[2] = input_buffer[7];
-  output_buffer[3] = input_buffer[8];
+  output_buffer[3] = input_buffer[7];
+  output_buffer[4] = input_buffer[8];
   // Channel C
-  output_buffer[4] = input_buffer[13];
-  output_buffer[5] = input_buffer[14];
+  output_buffer[5] = input_buffer[13];
+  output_buffer[6] = input_buffer[14];
   // Channel D
-  output_buffer[6] = input_buffer[19];
-  output_buffer[7] = input_buffer[20];
+  output_buffer[7] = input_buffer[19];
+  output_buffer[8] = input_buffer[20];
 
-  i2c_dev->write(output_buffer, 8);
+  if (!i2c_dev->write(output_buffer, 9)){
+    return false;
+  }
+  return true;
 }
