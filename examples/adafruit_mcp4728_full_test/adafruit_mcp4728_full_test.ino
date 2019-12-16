@@ -40,4 +40,10 @@ void setup(void) {
   mcp.saveToEEPROM();
 }
 
-void loop() { delay(1000); }
+void loop() {
+
+  mcp.fastWrite(random(0, 4095), random(0, 4095), random(0, 4095),
+                random(0, 4095));
+
+  delay(1000);
+}

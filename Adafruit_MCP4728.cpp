@@ -9,7 +9,7 @@
  * 	I2C Driver for the Adafruit MCP4728 4-Channel 12-Bit I2C DAC library
  *
  * 	This is a library for the Adafruit MCP4728 breakout:
- * 	https://www.adafruit.com/product/44XX
+ * 	https://www.adafruit.com/product/4470
  *
  * 	Adafruit invests time and resources providing this open source code,
  *  please support Adafruit and open-source hardware by purchasing products from
@@ -56,7 +56,7 @@ boolean Adafruit_MCP4728::begin(uint8_t i2c_address, TwoWire *wire) {
     return false;
   }
 
-    return true;
+  return true;
 }
 
 /**
@@ -68,14 +68,18 @@ boolean Adafruit_MCP4728::begin(uint8_t i2c_address, TwoWire *wire) {
  * @param new_gain Optional gain setting - Defaults to `MCP4728_GAIN_1X`
  * @param new_pd_mode Optional power down mode setting - Defaults to
  * `MCP4728_PD_MOOE_NORMAL`
- * @param udac Optional UDAC setting - Defaults to `false`, latching immediately.
+ * @param udac Optional UDAC setting - Defaults to `false`, latching
+ * immediately. Set to `true` to latch when the LDAC pin is pulled low
  *
- * Set to `true` to latch when the LDAC pin is pulled low
+ * @return true if the write was successful
+ * @return false if there was an error with I2C communication between the MCU
+ * and the DAC
  */
-
-void Adafruit_MCP4728::setChannelValue(
+bool Adafruit_MCP4728::setChannelValue(
     MCP4728_channel_t channel, uint16_t new_value, MCP4728_vref_t new_vref,
     MCP4728_gain_t new_gain, MCP4728_pd_mode_t new_pd_mode, bool udac) {
+
+  uint8_t output_buffer[3];
 
   // build the setter header/ "address"
   // 0 1 0 0 0 DAC1 DAC0 UDAC[A]
@@ -83,16 +87,55 @@ void Adafruit_MCP4728::setChannelValue(
   sequential_write_cmd |= (channel << 1);
   sequential_write_cmd |= udac;
 
+  output_buffer[0] = sequential_write_cmd;
   // VREF PD1 PD0 Gx D11 D10 D9 D8 [A] D7 D6 D5 D4 D3 D2 D1 D0 [A]
   new_value |= (new_vref << 15);
   new_value |= (new_pd_mode << 13);
   new_value |= (new_gain << 12);
 
-  Adafruit_BusIO_Register
-      input_reg = // because it only writes to the input register
-      Adafruit_BusIO_Register(i2c_dev, sequential_write_cmd, 2, MSBFIRST);
+  output_buffer[1] = new_value >> 8;
+  output_buffer[2] = new_value & 0xFF;
 
-  input_reg.write(new_value);
+  if (!i2c_dev->write(output_buffer, 3)) {
+    return false;
+  }
+  return true;
+}
+/**
+ * @brief Set the values of all four channels simultaneously with minimal delay
+ * or configuration
+ *
+ * @param channel_a_value The value to assign to channel A
+ * @param channel_b_value The value to assign to channel B
+ * @param channel_c_value The value to assign to channel C
+ * @param channel_d_value The value to assign to channel D
+ * @return true if the write was successful
+ * @return false if there was an error with I2C communication between the MCU
+ * and the DAC
+ */
+bool Adafruit_MCP4728::fastWrite(uint16_t channel_a_value,
+                                 uint16_t channel_b_value,
+                                 uint16_t channel_c_value,
+                                 uint16_t channel_d_value) {
+
+  uint8_t output_buffer[8];
+
+  output_buffer[0] = channel_a_value >> 8;
+  output_buffer[2] = channel_a_value & 0xFF;
+
+  output_buffer[2] = channel_b_value >> 8;
+  output_buffer[3] = channel_b_value & 0xFF;
+
+  output_buffer[4] = channel_c_value >> 8;
+  output_buffer[5] = channel_c_value & 0xFF;
+
+  output_buffer[6] = channel_d_value >> 8;
+  output_buffer[7] = channel_d_value & 0xFF;
+
+  if (!i2c_dev->write(output_buffer, 8)) {
+    return false;
+  }
+  return true;
 }
 
 /**
@@ -100,8 +143,9 @@ void Adafruit_MCP4728::setChannelValue(
  * makeing them the default values when the ADC is powered on
  *
  * @return true if the write was successful
- * @return false if there was an error writing to the I2C bus
- */
+ * @return false if there was an error with I2C communication between the MCU
+ * and the DAC */
+
 bool Adafruit_MCP4728::saveToEEPROM(void) {
   uint8_t input_buffer[24];
   uint8_t output_buffer[9];
@@ -130,8 +174,9 @@ bool Adafruit_MCP4728::saveToEEPROM(void) {
   output_buffer[7] = input_buffer[19];
   output_buffer[8] = input_buffer[20];
 
-  if (!i2c_dev->write(output_buffer, 9)){
+  if (!i2c_dev->write(output_buffer, 9)) {
     return false;
   }
+  delay(15);
   return true;
 }

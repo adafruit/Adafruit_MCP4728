@@ -4,7 +4,7 @@ Adafruit MCP4728 ![Build Status](https://travis-ci.com/adafruit/Adafruit_MCP4728
 This is the Adafruit MCP4728 4-Channel 12-Bit I2C DAC Library for Arduino
 
 Tested and works great with the Adafruit MCP4728 Breakout Board
-[<img src="assets/board.png?raw=true" width="500px">](https://www.adafruit.com/products/4438)
+[<img src="assets/board.png?raw=true" width="500px">](https://www.adafruit.com/products/4470)
 
 
 This chip uses I2C to communicate, 2 pins are required to interface

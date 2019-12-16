@@ -4,7 +4,7 @@
  * 	I2C Driver for the Adafruit MCP4728 4-Channel 12-Bit I2C DAC library
  *
  * 	This is a library for the Adafruit MCP4728 breakout:
- * 	https://www.adafruit.com/products/44XX
+ * 	https://www.adafruit.com/products/4470
  *
  * 	Adafruit invests time and resources providing this open source code,
  *  please support Adafruit and open-source hardware by purchasing products from
@@ -28,6 +28,8 @@
   0x40 ///< Command to write to the input register only
 #define MCP4728_MULTI_EEPROM_CMD                                               \
   0x50 ///< Command to write to the input register and EEPROM
+#define MCP4728_FAST_WRITE_CMD                                                 \
+  0xC0 ///< Command to write all channels at once with
 
 /**
  * @brief Power status values
@@ -88,12 +90,14 @@ public:
   bool begin(uint8_t i2c_address = MCP4728_I2CADDR_DEFAULT,
              TwoWire *wire = &Wire);
 
-  void setChannelValue(MCP4728_channel_t channel, uint16_t new_value,
+  bool setChannelValue(MCP4728_channel_t channel, uint16_t new_value,
                        MCP4728_vref_t new_vref = MCP4728_VREF_VDD,
                        MCP4728_gain_t new_gain = MCP4728_GAIN_1X,
                        MCP4728_pd_mode_t new_pd_mode = MCP4728_PD_MODE_NORMAL,
                        bool udac = false);
 
+  bool fastWrite(uint16_t channel_a_value, uint16_t channel_b_value,
+                 uint16_t channel_c_value, uint16_t channel_d_value);
   bool saveToEEPROM(void);
 
 private:
