@@ -22,8 +22,8 @@ void setup(void) {
   /*
    * @param channel The channel to update
    * @param new_value The new value to assign
-   * @param new_gain Optional gain setting - Defaults to `MCP4728_GAIN_1X`
    * @param new_vref Optional vref setting - Defaults to `MCP4728_VREF_VDD`
+   * @param new_gain Optional gain setting - Defaults to `MCP4728_GAIN_1X`
    * @param new_pd_mode Optional power down mode setting - Defaults to
    * `MCP4728_PD_MOOE_NORMAL`
    * @param udac Optional UDAC setting - Defaults to `false`, latching (nearly).

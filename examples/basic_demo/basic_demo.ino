@@ -20,8 +20,8 @@ void setup(void) {
   }
 
   mcp.setChannelValue(MCP4728_CHANNEL_A, 4095);
-  mcp.setChannelValue(MCP4728_CHANNEL_B, 1024);
-  mcp.setChannelValue(MCP4728_CHANNEL_C, 2048);
+  mcp.setChannelValue(MCP4728_CHANNEL_B, 2048);
+  mcp.setChannelValue(MCP4728_CHANNEL_C, 1024);
   mcp.setChannelValue(MCP4728_CHANNEL_D, 0);
 }
 
