@@ -1,4 +1,4 @@
-Adafruit MCP4728 ![Build Status](https://travis-ci.com/adafruit/Adafruit_MCP4728.svg?branch=master)
+Adafruit_MCP4728 [![Build Status](https://github.com/adafruit/Adafruit_MCP4728/workflows/Arduino%20Library%20CI/badge.svg)](https://github.com/adafruit/Adafruit_MCP4728/actions)
 ================
 
 This is the Adafruit MCP4728 4-Channel 12-Bit I2C DAC Library for Arduino
