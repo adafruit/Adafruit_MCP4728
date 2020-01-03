@@ -1,4 +1,4 @@
-// Basic demo for configuring the MCP4728 4-Channel 12-bit I2C DAC
+// Demo for configuring the Vref of the MCP4728 4-Channel 12-bit I2C DAC
 #include <Adafruit_MCP4728.h>
 #include <Wire.h>
 
@@ -30,20 +30,31 @@ void setup(void) {
    * Set to `true` to latch when the UDAC pin is pulled low
    *
    */
+
+  // Vref = MCP_VREF_VDD, value = 0, 0V
   mcp.setChannelValue(MCP4728_CHANNEL_A, 0);
+
+  // value is vref/4, with 2.048V internal vref and 2X gain
+  // = 4.096/4 = 1.024V
   mcp.setChannelValue(MCP4728_CHANNEL_B, 1024, MCP4728_VREF_INTERNAL,
                       MCP4728_GAIN_2X);
+
+  // value is vref/2, with 2.048V internal vref and 2X gain
+  // = 4.096/2 = 2.048V
   mcp.setChannelValue(MCP4728_CHANNEL_C, 2048, MCP4728_VREF_INTERNAL,
                       MCP4728_GAIN_2X);
-  mcp.setChannelValue(MCP4728_CHANNEL_D, 0);
-  delay(1000);
+
+  // value is vref/2, Vref is MCP4728_VREF_VDD(default), the power supply voltage (usually 3.3V or 5V)
+  // For Vdd/Vref = 5V, voltage = 2.5V
+  // For 3.3V, voltage = 1.65V
+  // Values will vary depending on the actual Vref/Vdd
+  mcp.setChannelValue(MCP4728_CHANNEL_D, 2048);
+
+  // Save the current settings to the interal EEPROM, making them the default values on power up.
   mcp.saveToEEPROM();
 }
 
 void loop() {
-
-  mcp.fastWrite(random(0, 4095), random(0, 4095), random(0, 4095),
-                random(0, 4095));
 
   delay(1000);
 }
