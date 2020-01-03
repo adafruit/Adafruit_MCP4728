@@ -34,27 +34,22 @@ void setup(void) {
   // Vref = MCP_VREF_VDD, value = 0, 0V
   mcp.setChannelValue(MCP4728_CHANNEL_A, 0);
 
-  // value is vref/4, with 2.048V internal vref and 2X gain
-  // = 4.096/4 = 1.024V
-  mcp.setChannelValue(MCP4728_CHANNEL_B, 1024, MCP4728_VREF_INTERNAL,
-                      MCP4728_GAIN_2X);
+  // value is vref/2, with 2.048V internal Vref and 1X gain
+  // = 2.048/2 = 1.024V
+  mcp.setChannelValue(MCP4728_CHANNEL_B, 2048, MCP4728_VREF_INTERNAL,
+                      MCP4728_GAIN_1X);
 
-  // value is vref/2, with 2.048V internal vref and 2X gain
+  // value is vref/2, with 2.048V internal vref and *2X gain*
   // = 4.096/2 = 2.048V
   mcp.setChannelValue(MCP4728_CHANNEL_C, 2048, MCP4728_VREF_INTERNAL,
                       MCP4728_GAIN_2X);
 
-  // value is vref/2, Vref is MCP4728_VREF_VDD(default), the power supply voltage (usually 3.3V or 5V)
-  // For Vdd/Vref = 5V, voltage = 2.5V
-  // For 3.3V, voltage = 1.65V
-  // Values will vary depending on the actual Vref/Vdd
+  // value is vref/2, Vref is MCP4728_VREF_VDD(default), the power supply
+  // voltage (usually 3.3V or 5V) For Vdd/Vref = 5V, voltage = 2.5V For 3.3V,
+  // voltage = 1.65V Values will vary depending on the actual Vref/Vdd
   mcp.setChannelValue(MCP4728_CHANNEL_D, 2048);
 
-  // Save the current settings to the interal EEPROM, making them the default values on power up.
   mcp.saveToEEPROM();
 }
 
-void loop() {
-
-  delay(1000);
-}
+void loop() { delay(1000); }
