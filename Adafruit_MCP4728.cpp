@@ -121,7 +121,7 @@ bool Adafruit_MCP4728::fastWrite(uint16_t channel_a_value,
   uint8_t output_buffer[8];
 
   output_buffer[0] = channel_a_value >> 8;
-  output_buffer[2] = channel_a_value & 0xFF;
+  output_buffer[1] = channel_a_value & 0xFF;
 
   output_buffer[2] = channel_b_value >> 8;
   output_buffer[3] = channel_b_value & 0xFF;
