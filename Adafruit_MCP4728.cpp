@@ -220,4 +220,3 @@ uint16_t Adafruit_MCP4728::getEEPROMValue(MCP4728_channel_t channel) {
 
   return value;
 }
-
