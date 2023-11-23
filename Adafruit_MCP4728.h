@@ -100,6 +100,9 @@ public:
                  uint16_t channel_c_value, uint16_t channel_d_value);
   bool saveToEEPROM(void);
 
+  uint16_t getChannelValue(MCP4728_channel_t channel);
+  uint16_t getEEPROMValue(MCP4728_channel_t channel);
+
 private:
   bool _init(void);
 

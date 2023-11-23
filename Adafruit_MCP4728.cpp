@@ -180,3 +180,43 @@ bool Adafruit_MCP4728::saveToEEPROM(void) {
   delay(15);
   return true;
 }
+
+/**
+ * @brief Read the current value of one DAC value.
+ *
+ * @param channel the channel to read
+ * @return current value of the specified channel
+ */
+
+uint16_t Adafruit_MCP4728::getChannelValue(MCP4728_channel_t channel) {
+  uint16_t value;
+  uint8_t input_buffer[24];
+  /* 24 bytes are (3 bytes outreg, 3 bytes EEPROM) x 4 channels */
+  uint8_t reg_base = 6 * ((uint8_t)channel);
+
+  i2c_dev->read(input_buffer, 24);
+  value =
+      input_buffer[reg_base + 2] + ((0x0F & input_buffer[reg_base + 1]) << 8);
+
+  return value;
+}
+
+/**
+ * @brief Read the current value of one EEPROM value.
+ *
+ * @param channel the channel to read
+ * @return current value of the specified channel
+ */
+
+uint16_t Adafruit_MCP4728::getEEPROMValue(MCP4728_channel_t channel) {
+  uint16_t value;
+  uint8_t input_buffer[24];
+  /* 24 bytes are (3 bytes outreg, 3 bytes EEPROM) x 4 channels */
+  uint8_t reg_base = 6 * ((uint8_t)channel);
+
+  i2c_dev->read(input_buffer, 24);
+  value =
+      input_buffer[reg_base + 5] + ((0x0F & input_buffer[reg_base + 4]) << 8);
+
+  return value;
+}
