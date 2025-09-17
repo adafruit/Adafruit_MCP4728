@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['savetoeeprom',['saveToEEPROM',['../class_adafruit___m_c_p4728.html#ab4391a66655c797cf31b4219d5cf4f49',1,'Adafruit_MCP4728']]],
-  ['setchannelvalue',['setChannelValue',['../class_adafruit___m_c_p4728.html#a6dfc8924b33ddaba8cdce5d267256c6e',1,'Adafruit_MCP4728']]]
+  ['getchannelvalue',['getChannelValue',['../class_adafruit___m_c_p4728.html#a739e861e745d3779db920048b5ed0853',1,'Adafruit_MCP4728']]],
+  ['geteepromvalue',['getEEPROMValue',['../class_adafruit___m_c_p4728.html#acbc4e5c1cd7c502422e8711f979ba4dc',1,'Adafruit_MCP4728']]]
 ];

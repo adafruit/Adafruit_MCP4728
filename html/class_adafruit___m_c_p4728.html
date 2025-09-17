@@ -89,6 +89,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab4391a66655c797cf31b4219d5cf4f49"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___m_c_p4728.html#ab4391a66655c797cf31b4219d5cf4f49">saveToEEPROM</a> (void)</td></tr>
 <tr class="memdesc:ab4391a66655c797cf31b4219d5cf4f49"><td class="mdescLeft">&#160;</td><td class="mdescRight">Saves the DAC's input register settings to the internal EEPROM, makeing them the default values when the ADC is powered on.  <a href="#ab4391a66655c797cf31b4219d5cf4f49">More...</a><br /></td></tr>
 <tr class="separator:ab4391a66655c797cf31b4219d5cf4f49"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a739e861e745d3779db920048b5ed0853"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___m_c_p4728.html#a739e861e745d3779db920048b5ed0853">getChannelValue</a> (<a class="el" href="_adafruit___m_c_p4728_8h.html#a384942c6e80974e6ea3cdb12d80d0e84">MCP4728_channel_t</a> <a class="el" href="_adafruit___m_c_p4728_8h.html#af4463779bb9b119822c94419a10d31c0">channel</a>)</td></tr>
+<tr class="memdesc:a739e861e745d3779db920048b5ed0853"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read the current value of one DAC value.  <a href="#a739e861e745d3779db920048b5ed0853">More...</a><br /></td></tr>
+<tr class="separator:a739e861e745d3779db920048b5ed0853"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acbc4e5c1cd7c502422e8711f979ba4dc"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___m_c_p4728.html#acbc4e5c1cd7c502422e8711f979ba4dc">getEEPROMValue</a> (<a class="el" href="_adafruit___m_c_p4728_8h.html#a384942c6e80974e6ea3cdb12d80d0e84">MCP4728_channel_t</a> <a class="el" href="_adafruit___m_c_p4728_8h.html#af4463779bb9b119822c94419a10d31c0">channel</a>)</td></tr>
+<tr class="memdesc:acbc4e5c1cd7c502422e8711f979ba4dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read the current value of one EEPROM value.  <a href="#acbc4e5c1cd7c502422e8711f979ba4dc">More...</a><br /></td></tr>
+<tr class="separator:acbc4e5c1cd7c502422e8711f979ba4dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class that stores state and functions for interacting with the MCP4728 I2C Digital Potentiometer. </p>
@@ -273,6 +279,60 @@ false if there was an error with I2C communication between the MCU and the DAC <
 <dl class="section return"><dt>Returns</dt><dd>true if the write was successful </dd>
 <dd>
 false if there was an error with I2C communication between the MCU and the DAC </dd></dl>
+
+</div>
+</div>
+<a id="a739e861e745d3779db920048b5ed0853"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a739e861e745d3779db920048b5ed0853">&#9670;&nbsp;</a></span>getChannelValue()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16_t Adafruit_MCP4728::getChannelValue </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="_adafruit___m_c_p4728_8h.html#a384942c6e80974e6ea3cdb12d80d0e84">MCP4728_channel_t</a>&#160;</td>
+          <td class="paramname"><em>channel</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Read the current value of one DAC value. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">channel</td><td>the channel to read </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>current value of the specified channel </dd></dl>
+
+</div>
+</div>
+<a id="acbc4e5c1cd7c502422e8711f979ba4dc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acbc4e5c1cd7c502422e8711f979ba4dc">&#9670;&nbsp;</a></span>getEEPROMValue()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16_t Adafruit_MCP4728::getEEPROMValue </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="_adafruit___m_c_p4728_8h.html#a384942c6e80974e6ea3cdb12d80d0e84">MCP4728_channel_t</a>&#160;</td>
+          <td class="paramname"><em>channel</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Read the current value of one EEPROM value. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">channel</td><td>the channel to read </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>current value of the specified channel </dd></dl>
 
 </div>
 </div>
